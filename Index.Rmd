@@ -1,0 +1,38 @@
+---
+title: "Cool Map Webpage"
+author: "Laurel Mayhew"
+date: "6/17/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Things to Notice
+
+1. This data represents US Geological Survey earthquakes with magnitude 6 
+or greater.
+2. Zoom in to see the icon.
+3. Popup has location description, date, earthquake magnitude, depth (in km from 
+surface).
+
+
+```{r pressure, echo=FALSE, message=FALSE}
+library(leaflet)
+df <- read.csv(file="EarthQuakemodified.csv")
+
+df$popup <- paste("Location:",df$place,"<br> Date:",df$Date,
+      "<br>Magnitude:",df$mag,"<br>Depth:",df$depth," km")
+earthquakeIcon <- makeIcon(
+  iconUrl = "earthquakeImage.png",
+  iconWidth = 38, iconHeight = 38,
+  iconAnchorX = 22, iconAnchorY = 94
+)
+
+df %>% 
+      leaflet() %>%
+      addTiles() %>%
+      addMarkers(icon=earthquakeIcon,popup=df$popup, clusterOptions=markerClusterOptions())
+```
+
